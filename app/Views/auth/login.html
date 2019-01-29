@@ -1,0 +1,61 @@
+{% set pageTitle="Auth page" %}
+{% extends "layout.html" %}
+{% block head %}
+{{parent()}}
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height:100vh">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/auth/login" autocomplete="off" id="form_container">
+                        <div class="form-group text-center">
+                            <h3>My You<span
+                                    style="color:white; background-color:red;border-radius: 0.5rem;padding:0 0.4rem;">Tube</span>
+                            </h3>
+                        </div>
+                        <div class="form-group">
+                            Username: <input type="text" class="form-control" name="user" required>
+                        </div>
+                        <div class="form-group">
+                            Password: <input type="password" class="form-control" name="pass" required>
+                        </div>
+                        <div class="form-group" id="password_verify_container">
+                            Re enter - Password: <input type="password" class="form-control" name="password_verify">
+                        </div>
+                        <div class="text-center">
+                            <button type="button right" id="sendlogin" class="btn btn-primary">LOGIN</button>
+                            <button type="button right" id="sendsignin" class="btn btn-secondary">SIGN IN</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var sign_in = false;
+    $(document).ready(function () {
+        $("#password_verify_container").hide();
+        console.log("loaded..");
+    });
+
+    $("#sendlogin").click(function () {
+        $("#form_container").attr("action", "/auth/login");
+    });
+
+    $("#sendsignin").click(function (ev) {
+        if (!sign_in) {
+            ev.preventDefault();
+            $("#password_verify_container").show();
+            sign_in = true;
+        } else {
+            $("#form_container").attr("action", "/auth/signin");
+        }
+    });
+</script>
+
+{% endblock %}
