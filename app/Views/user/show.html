@@ -1,14 +1,25 @@
 {% set pageTitle="User details" %}
 {% extends "layout.html" %}
 {% block head %}
-    {{parent()}}
-    <link rel="stylesheet" href="user.css" />
+{{parent()}}
 {% endblock %}
 {% block content %}
-<h1>User {{user.name}}</h1>
-<ul>
-    <li>Email: {{user.email}}</li>
-    <li>Registered: {{user.created_at}}</li>
-</ul>
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height:100vh">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center col-centered">
+                        <h1>User name: {{user.user}}</h1>
+                        <ul>
+                            <li>Email: {{user.email}}</li>
+                            <li>Registered: {{user.DateInserted}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 

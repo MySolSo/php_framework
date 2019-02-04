@@ -16,23 +16,28 @@ class AuthController extends Controller
     {
         parent::__construct();
         $this->model("User");
-        $this->user->newDbCon();
     }
 
     public function showUserLogin()
     {
         $this->user->find(["user" => $_SESSION['username']]);
-        $this->view('auth/login.html', ["user" => $_SESSION['username'], "id" => 3, "btn" => '<a href="/auth/logout" class="btn btn-warning">Logout</a>']);
+        $this->view('auth/login.html', ["user" => $_SESSION['username'], "id" => $_SESSION['user_id'], "btn" => '<a href="/auth/logout" class="btn btn-warning">Logout</a>']);
     }
 
     public function showLogin(){
         unset($_POST["password_verify"]);
-        if($this->user->find($_POST) == false){
+        $_POST["pass"] = hash('ripemd160', $_POST["pass"]);
+        $user_data = $this->user->find($_POST);
+        if($user_data == false){
             $this->view('pages/message.html', ["text" => 'User or password does not exist <a href="/auth" class="btn btn-primary">Go to Auth</a>']);
         }
         else {
-            $_SESSION['username'] = $_POST['user'];
-            header("Location: /");
+            $_SESSION['username'] = $user_data->user;
+            $_SESSION['user_id'] = $user_data->id;
+
+            // to do not resubmit data
+            header('Location: /');
+//            $_SERVER["router"] ->getResource("/");
         }
     }
 
@@ -41,10 +46,18 @@ class AuthController extends Controller
         if ($_POST["pass"] === $_POST["password_verify"])
         {
             unset($_POST["password_verify"]);
+            $_POST["pass"] = hash('ripemd160', $_POST["pass"]);
             $this->user->new($_POST);
+
+            $this->view('pages/message.html', ["text" => 'Wellcome to our services <a href="/auth" class="btn btn-primary">Go to Auth</a>']);
         }
         else {
             $this->view('pages/message.html', ["text" => 'The password did not match <a href="/auth" class="btn btn-primary">Go to Auth</a>']);
         }
+    }
+
+    public function showLogout(){
+        unset($_SESSION["username"]);
+        $this->view('pages/message.html', ["text" => 'You have been logged out <a href="/page/home" class="btn btn-primary">Go to Home</a>']);
     }
 }

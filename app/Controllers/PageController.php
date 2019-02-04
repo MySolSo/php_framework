@@ -14,7 +14,7 @@ class PageController extends Controller
     }
 
     public function showHomepage(){
-        $this->view('pages/homepage.html', ["user" => $_SESSION['username'], "id" => 3, "btn" => '<a href="/auth/logout" class="btn btn-warning mt-1" style="width:10rem">Logout</a><br>']);
+        $this->view('pages/homepage.html', isset($_SESSION["username"])?["user" => $_SESSION['username'], "id" => $_SESSION["user_id"], "btn" => '<a href="/auth/logout" class="btn btn-warning mt-1" style="width:10rem">Logout</a><br>'] : []);
     }
 
     public function showMessage($text){

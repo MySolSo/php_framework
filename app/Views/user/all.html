@@ -1,0 +1,105 @@
+{% set pageTitle="Show all" %}
+{% extends "layout.html" %}
+{% block head %}
+{{parent()}}
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css"/>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height:100vh">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-body">
+                    <table id="users" class="display small_font" width="100%" cellspacing="0">
+                        <thead style="background-color: lightblue">
+                        <tr>
+                            <th>&nbsp;<span class="glyphicon glyphicon-user"> </span></th>
+                            <th>UserName&nbsp;</th>
+                            <th>Email &nbsp; </th>
+                            <th>Updated &nbsp; </th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <a href="/page/home" id="sendcancel" class="btn btn-secondary" style="color:white">BACK</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var table = $("table#users");
+    $(document).ready(function () {
+        load_table();
+        $('#users_filter').hide();
+        $('.dataTables_paginate').hide();
+        $('.dataTables_info').hide();
+    });
+
+    function load_table() {
+        if ($.fn.dataTable.isDataTable(table)) {
+            table.dataTable().fnClearTable(0);
+            table.dataTable().fnDestroy();
+        }
+
+        table.dataTable({
+            'columns': [
+                {
+                    'data': 'id',
+                    'width': '10%',
+                    'orderable': false
+                },
+                {
+                    'data': 'name',
+                    'class': 'centered',
+                    'width': '10%',
+                    'orderable': false
+                },
+                {
+                    'data': 'email',
+                    'class': 'centered',
+                    'width': '30%',
+                    'orderable': false
+                },
+                {
+                    'data': 'inserted',
+                    'class': 'centered',
+                    'width': '50%',
+                    'orderable': false
+                },
+
+            ],
+            'processing': true,
+            'serverSide': true,
+            'lengthChange': false,
+            'scrollY': '40vh',
+            'autoWidth': false,
+            'ajax': {
+                'url': '/rest/users',
+                'type': 'POST',
+                'data': {},
+                'error': function (msg) {
+                    console.log(msg);
+                    // set_alert('warning', 'Failed to load playlists' + JSON.stringify(msg))
+                }
+            },
+            'preDrawCallback': function (settings) {
+                $('.users_prc').css({'display': 'block', 'z-index': 10000});
+            },
+            'initComplete': function (settings, json) {
+                $('.users_prc').css('display', 'none');
+            }
+        });
+
+        var search_box = $('div#user_filter');
+        search_box.off();
+        search_box.on('keyup', function (e) {
+            if (e.keyCode == 13) {
+                table.fnFilter($(this).val());
+            }
+        });
+    }
+</script>
+{% endblock %}

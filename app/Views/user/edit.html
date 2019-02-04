@@ -1,0 +1,34 @@
+{% set pageTitle="User details" %}
+{% extends "layout.html" %}
+{% block head %}
+{{parent()}}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height:100vh">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <h1>Edit yout user!</h1>
+                    <form method="post" action="/user/doedit" autocomplete="off" id="form_container">
+                        <div class="form-group">
+                            Username: <input type="text" class="form-control" name="user" value="{{user.user}}" required>
+                        </div>
+                        <div class="form-group">
+                            Email: <input type="text" class="form-control" name="email" value="{{user.email}}" required>
+                        </div>
+                        <div class="form-group">
+                            Password: <input type="password" class="form-control" name="pass" >
+                        </div>
+                        <div class="text-center">
+                            <button type="button right" id="sendedit" class="btn btn-primary">EDIT</button>
+                            <a href="/page/home" id="sendcancel" class="btn btn-secondary" style="color:white">CANCEL</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
